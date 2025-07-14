@@ -9,24 +9,74 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 block: 'start'
             });
         }
+        // Cerrar menú móvil después de hacer clic
+        closeMobileMenu();
     });
 });
 
 // Header background on scroll
 window.addEventListener('scroll', function() {
     const header = document.querySelector('header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(44, 44, 44, 0.95)';
+    if (window.scrollY > 50) {
+        header.style.background = 'rgba(0, 0, 0, 0.98)';
+        header.style.padding = '0.5rem 0';
     } else {
-        header.style.background = 'linear-gradient(135deg, #2c2c2c, #3a3a3a)';
+        header.style.background = 'rgba(0, 0, 0, 0.95)';
+        header.style.padding = '0.8rem 0';
     }
 });
 
-// Mobile menu toggle (for future enhancement)
+// Mobile menu toggle
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    
     navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('active');
+    
+    // Prevenir scroll cuando el menú está abierto
+    if (navLinks.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+    }
 }
+
+// Cerrar menú móvil
+function closeMobileMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    
+    navLinks.classList.remove('active');
+    menuToggle.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Cerrar menú al hacer clic en el overlay
+document.addEventListener('click', function(e) {
+    const navLinks = document.querySelector('.nav-links');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    
+    if (navLinks.classList.contains('active') && 
+        !navLinks.contains(e.target) && 
+        !menuToggle.contains(e.target)) {
+        closeMobileMenu();
+    }
+});
+
+// Cerrar menú al redimensionar ventana
+window.addEventListener('resize', function() {
+    if (window.innerWidth > 768) {
+        closeMobileMenu();
+    }
+});
+
+// Cerrar menú con tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeMobileMenu();
+    }
+});
 
 // Loading animation for product cards
 document.addEventListener('DOMContentLoaded', function() {
